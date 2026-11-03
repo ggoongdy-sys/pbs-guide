@@ -799,6 +799,41 @@ a.case-card:hover,.tile:hover,.rec-card:hover,.rel-item:hover,.type-btn:hover,.r
 .form-group{display:grid;gap:10px}
 .fg-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;margin-top:8px}
 .form-file .btn{justify-self:start}
+
+/* ===== 자료실: 부록 서식 카드 ===== */
+.lib-stack{display:grid;gap:34px}
+.lib-stack .toc{max-width:880px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;margin-top:4px}
+.fg-title{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:15px;font-weight:700;margin:18px 0 10px;color:var(--ink)}
+.fcard{--fc:var(--caramel);--fc-ink:var(--caramel-ink);--fc-light:var(--peach);--fc-soft:color-mix(in srgb,var(--peach) 45%,var(--surface));
+  position:relative;display:flex;flex-direction:column;justify-content:flex-end;height:360px;padding:16px;border-radius:20px;border:1px solid var(--hair);background:var(--surface);box-shadow:var(--sh-soft);overflow:hidden;text-align:left;color:var(--ink);isolation:isolate;
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .35s ease}
+.fcard.g2{--fc:var(--mauve);--fc-ink:var(--lav-ink);--fc-light:var(--mauve-soft);--fc-soft:var(--lav-soft)}
+.fcard.g3{--fc:var(--navy);--fc-ink:var(--navy-ink);--fc-light:color-mix(in srgb,var(--navy) 22%,var(--surface));--fc-soft:color-mix(in srgb,var(--navy) 10%,var(--surface))}
+.fc-bg{position:absolute;inset:0;z-index:-1;opacity:.75;background:radial-gradient(circle at 50% 30%,var(--fc-light) 0%,transparent 70%)}
+.fc-idx{position:absolute;top:18px;left:20px;font-size:17px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.fc-art{position:absolute;inset:0 0 auto;height:62%;display:grid;place-items:center;z-index:0;transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.fc-art svg{width:132px;height:132px;filter:drop-shadow(0 10px 14px color-mix(in srgb,var(--fc) 30%,transparent))}
+.fc-art .s1{fill:var(--fc)} .fc-art .s2{fill:var(--surface);stroke:var(--fc-ink);stroke-width:3}
+.fc-art .s3{fill:var(--fc-ink)} .fc-art .o{fill:none;stroke:var(--fc-ink);stroke-width:3}
+.fc-art .ln{fill:none;stroke:color-mix(in srgb,var(--fc-ink) 45%,transparent);stroke-width:4;stroke-linecap:round}
+.fc-art .ln.dk{stroke:var(--fc-ink);stroke-width:3}
+.fc-art .tk{fill:none;stroke:var(--fc-ink);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.fc-body{position:relative;z-index:2;display:grid;gap:6px;padding:14px 16px;border-radius:14px;border:1px solid var(--hair);background:color-mix(in srgb,var(--surface) 82%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.fc-tag{justify-self:start;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:var(--fc-soft);color:var(--fc-ink)}
+.fc-title{font-size:16px;line-height:1.4}
+.fc-desc{font-size:13px;line-height:1.55;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fc-dl{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:13.5px;font-weight:700;color:var(--fc-ink)}
+.fc-dl small{font-weight:500;color:var(--muted)}
+.fcard:not([aria-disabled="true"]):hover,.fcard:not([aria-disabled="true"]):focus-visible{transform:translateY(-10px);box-shadow:var(--sh-hover)}
+.fcard:not([aria-disabled="true"]):hover .fc-art,.fcard:not([aria-disabled="true"]):focus-visible .fc-art{transform:translateY(-20px) scale(1.3)}
+.fcard[aria-disabled="true"]{cursor:default}
+.fcard[aria-disabled="true"] .fc-dl{color:var(--muted)}
+.fcard[aria-disabled="true"] .fc-art{opacity:.7}
+@media (prefers-reduced-motion:reduce){.fcard,.fc-art{transition:none}}
+/* 누적기록: 관련 사례 표시 */
+.rel-chip{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:1px 8px;border-radius:999px;font-size:11.5px;font-weight:700;background:color-mix(in srgb,var(--caramel) 18%,var(--surface));color:var(--caramel-ink)}
+.rec-note{font-size:13px;color:var(--muted);padding:8px 12px;border-radius:10px;background:var(--sunk)}
 </style>
 
 <header class="top">
@@ -1469,7 +1504,7 @@ function tocHTML(){
   return CHAPTERS.map(ch=>{
     const cs=CASES.filter(c=>ch.id==="IV");
     const forms=(ch.forms||[]).map(id=>FORMS.find(f=>f.id===id)).filter(Boolean);
-    const badge = ch.id==="IV" ? `사례 ${CASES.length}` : ch.site ? "이 사이트" : forms.length ? `서식 ${forms.length}` : (ch.sec ? `${ch.sec.length}개 절` : "");
+    const badge = ch.id==="IV" ? `사례 ${CASES.length}` : (!ch.site && forms.length) ? `서식 ${forms.length}` : "";
     const inner = [
       `<p class="toc-lead">${esc(ch.lead||"")}</p>`,
       ch.sec ? `<ul class="toc-sec">${ch.sec.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>` : "",
@@ -1661,8 +1696,8 @@ function relatedCases(d, level){
   }
   return out.sort((x,y)=>y.sc-x.sc||x.c.cat.localeCompare(y.c.cat)||x.c.no-y.c.no).slice(0,8);
 }
-function openPanel(opener){
-  state.panel.open=true; state.panel.caseId=null; state.panel.opener=opener||document.activeElement;
+function openPanel(opener, rec){
+  state.panel.open=true; state.panel.caseId=null; state.panel.rec=rec||null; state.panel.opener=opener||document.activeElement;
   drawPanel();
 }
 function closePanel(silent){
@@ -1673,7 +1708,7 @@ function closePanel(silent){
 }
 function panelKey(e){ if(e.key==="Escape" && !modalClose){ closePanel(); } }
 function drawPanel(){
-  const p=state.panel, d=state.draft, root=$("#panelRoot");
+  const p=state.panel, d=p.rec||state.draft, root=$("#panelRoot");
   if(!p.open || !d) return;
   let body;
   if(p.caseId){
@@ -1687,7 +1722,8 @@ function drawPanel(){
   } else {
     const rel=relatedCases(d,p.level);
     const bLabels=d.b.tags.map(id=>B_BY[id]?.label).filter(Boolean), aLabels=d.a.none?[]:d.a.tags.map(id=>A_BY[id]?.label).filter(Boolean);
-    const basis = (bLabels.length||aLabels.length||d.b.text) ? `<div class="basis"><span class="muted">찾은 기준</span>${bLabels.map(l=>`<span class="pill mauve">B · ${esc(l)}</span>`).join("")}${d.b.text.trim()?`<span class="pill mauve">B 서술 키워드</span>`:""}${aLabels.map(l=>`<span class="pill navy">A · ${esc(l)}</span>`).join("")}</div>` : "";
+    const recNote = p.rec ? `<p class="rec-note">저장된 기록 기준 · ${esc(stuName(d.studentId))} · ${esc(fmtDate(d.date))} ${esc(d.time)}</p>` : "";
+    const basis = recNote + ((bLabels.length||aLabels.length||d.b.text) ? `<div class="basis"><span class="muted">찾은 기준</span>${bLabels.map(l=>`<span class="pill mauve">B · ${esc(l)}</span>`).join("")}${d.b.text.trim()?`<span class="pill mauve">B 서술 키워드</span>`:""}${aLabels.map(l=>`<span class="pill navy">A · ${esc(l)}</span>`).join("")}</div>` : "");
     body=`${basis}
       <div class="field"><label for="pLv" class="small">학교급</label><select id="pLv" class="sel" style="min-height:38px"><option value="all">전체</option><option value="초">초등</option><option value="중고">중등·고등</option></select></div>
       ${rel.length ? rel.map(x=>`<button type="button" class="rel-item" data-act="panelCase" data-id="${x.c.id}"><span class="row" style="gap:6px"><span class="pill lav">${esc(CATS[x.c.cat].short)}</span><span class="pill caramel">${esc(x.c.lvText)}</span><span class="pill">사례 ${x.c.no}</span>${x.c.safety?`<span class="pill danger">${ic("siren","sm")}안전 확보</span>`:""}</span><b>${esc(x.c.t)}</b><span class="hits" style="display:flex;flex-wrap:wrap;gap:4px">${x.hits.map(h=>`<span class="hitk">${esc(h)}</span>`).join("")}</span></button>`).join("")
@@ -1729,7 +1765,8 @@ VIEWS.review = ()=>{
     return `<button class="crumb" type="button" data-act="toHistory">${ic("back","sm")}누적기록</button>
      <div class="page-head"><h1>기록 확인</h1><div class="right"><span class="pill ok">${ic("check","sm")}완료 저장됨</span></div><p class="sub">저장 ${esc(fmtStamp(r.createdAt))}${r.updatedAt&&r.updatedAt!==r.createdAt?` · 수정 ${esc(fmtStamp(r.updatedAt))}`:""}</p></div>
      <div class="review-grid"><div class="sheet">${sheetHTML(r)}</div>
-      <aside class="stack"><div class="side-card"><h2>이 기록으로</h2>
+      <aside class="stack"><button type="button" class="related-btn" data-act="openPanel" data-rec="${r.id}">${ic("spark","lg")}<span><b>관련 PBS 사례 보기</b><span>이 기록의 B 행동을 기준으로 자료집 사례를 찾아요</span></span><span class="cnt num">${relatedCases(r,"all").length}</span></button>
+      <div class="side-card"><h2>이 기록으로</h2>
         <button class="btn primary" type="button" data-act="editRec" data-id="${r.id}">${ic("pen","sm")}수정하기</button>
         <button class="btn ghost" type="button" data-act="newRec">${ic("plus","sm")}새 기록 쓰기</button>
         <button class="btn danger" type="button" data-act="delRec" data-id="${r.id}">${ic("trash","sm")}이 기록 삭제</button></div>
@@ -1845,7 +1882,7 @@ const sortRecs = rs => rs.slice().sort((a,b)=>(b.date+b.time).localeCompare(a.da
 const recTypes = r => Array.from(new Set(r.b.tags.flatMap(id=>B_BY[id]?.types||[]).concat(Array.from(analyze(r.b.text).types))));
 function recCard(r){
   const bt=secText(r,"b",B_BY)||"행동 미입력"; const ctx=[stuName(r.studentId), r.place, r.activity].filter(Boolean).join(" · ");
-  return `<button type="button" class="rec-card" data-act="openRec" data-id="${r.id}"><span class="t">${esc(r.time)}<small>${esc(fmtDate(r.date).replace(/ \(.\)/,""))}</small></span><span style="min-width:0"><span class="b">${esc(bt.length>90?bt.slice(0,90)+"…":bt)}</span><span class="ctx">${esc(ctx)}${r.sample?" · 예시":""}</span></span>${ic("chev")}</button>`;
+  return `<button type="button" class="rec-card" data-act="openRec" data-id="${r.id}"><span class="t">${esc(r.time)}<small>${esc(fmtDate(r.date).replace(/ \(.\)/,""))}</small></span><span style="min-width:0"><span class="b">${esc(bt.length>90?bt.slice(0,90)+"…":bt)}</span><span class="ctx">${esc(ctx)}${r.sample?" · 예시":""}${(n=>n?`<span class="rel-chip">관련 사례 ${n}</span>`:"")(relatedCases(r,"all").length)}</span></span>${ic("chev")}</button>`;
 }
 VIEWS.history = ()=>{
   const h=state.hist;
@@ -1874,13 +1911,12 @@ function drawHistory(){
    S10 자료실
    ========================================================= */
 VIEWS.library = ()=>`<div class="page-head"><h1>PBS 자료실</h1><p class="sub">${esc(CONTENT.name)} ${esc(CONTENT.version)}의 목차와 부록 서식입니다. ${esc(CONTENT.pageNote)}됩니다.</p></div>
-  <div class="lib-grid">
+  <div class="lib-stack">
     <section aria-labelledby="tocH"><h2 class="sec-h" id="tocH">자료집 목차</h2><div class="toc">${tocHTML()}</div></section>
-    <section aria-labelledby="formH" class="stack"><h2 class="sec-h" id="formH">부록 서식 내려받기</h2>
-      ${FORM_GROUPS.map(g=>`<div class="form-group"><h3 class="fg-h">${esc(g.title)} <span class="pill">${esc(g.tier)}</span></h3>
-        ${FORMS.filter(f=>f.g===g.id).map(f=>`<div class="form-file"><span class="fi">${ic("file","lg")}</span><div style="min-width:0"><h3><span class="muted small">${esc(f.no)}</span><br>${esc(f.name)}</h3><p class="small muted">${esc(f.desc)}</p></div>
-          ${formBtn(f)}</div>`).join("")}</div>`).join("")}
-      <p class="small muted">서식은 한글(.hwp) 원본을 압축 파일로 제공합니다. 학생 기록이 서식에 자동으로 들어가지 않습니다.</p>
+    <section aria-labelledby="formH"><h2 class="sec-h" id="formH">부록 서식 내려받기</h2>
+      <p class="small muted">카드를 누르면 한글(.hwp) 원본이 담긴 압축 파일을 내려받아요. 학생 기록이 서식에 자동으로 들어가지 않습니다.</p>
+      ${FORM_GROUPS.map(g=>`<h3 class="fg-title">${esc(g.title)} <span class="pill">${esc(g.tier)}</span></h3>
+        <div class="fgrid">${FORMS.filter(f=>f.g===g.id).map(formCard).join("")}</div>`).join("")}
     </section>
   </div>`;
 /* 서식 파일이 사이트와 함께 배포되어 있는지 확인 (없으면 '준비 중') */
@@ -1890,16 +1926,42 @@ function formBtn(f, toc){
   if(toc) return `<button type="button" class="toc-form" data-act="dlForm" data-id="${f.id}" ${off?"disabled":""}><span>${esc(f.no)} · ${esc(f.name)}</span>${st?ic("download","sm"):`<span class="pill">${st===undefined?"확인 중":"준비 중"}</span>`}</button>`;
   return `<button class="btn ghost sm" type="button" data-act="dlForm" data-id="${f.id}" ${off?"disabled":""}>${ic("download","sm")}${st===undefined?"파일 확인 중":st?"한글 파일 내려받기 (.zip)":"준비 중 · 파일을 사이트에 올리면 열려요"}</button>`;
 }
+/* 부록 서식 카드: 마우스를 올리면 카드가 떠오르고 가운데 그림이 커지며 올라감 (feature card 효과) */
+const FORM_ART = {art:"talk", f11:"check", f21:"contract", f22:"activity", f23:"check", f31:"plan", f32:"cico", f33:"cico"};
+function formArt(kind){
+  const P = {
+    talk:`<rect class="s1" x="14" y="22" width="62" height="44" rx="12"/><path class="s1" d="M30 66l-6 14 18-14z"/><rect class="s2" x="46" y="44" width="62" height="44" rx="12"/><path class="s2" d="M92 88l8 14-20-14z"/><circle class="s3" cx="32" cy="44" r="4"/><circle class="s3" cx="45" cy="44" r="4"/><circle class="s3" cx="58" cy="44" r="4"/><path class="ln" d="M62 62h30M62 72h22"/>`,
+    check:`<rect class="s2" x="26" y="18" width="70" height="88" rx="10"/><rect class="s1" x="44" y="12" width="34" height="14" rx="5"/><path class="tk" d="M38 46l6 6 10-12M38 68l6 6 10-12M38 90l6 6 10-12"/><path class="ln" d="M62 48h24M62 70h24M62 92h16"/>`,
+    contract:`<rect class="s2" x="22" y="14" width="66" height="90" rx="8"/><path class="ln" d="M34 34h42M34 46h42M34 58h30"/><path class="ln dk" d="M34 86c6-8 10 4 16-2s8-6 12 0"/><rect class="s1" x="74" y="54" width="12" height="52" rx="3" transform="rotate(32 80 80)"/><path class="s3" d="M66 98l4 10 6-8z"/>`,
+    activity:`<rect class="s2" x="20" y="16" width="72" height="88" rx="10"/><path class="s1" d="M56 30l6 13 14 2-10 10 3 14-13-7-13 7 3-14-10-10 14-2z"/><path class="ln" d="M34 84h44M34 94h30"/><rect class="s3" x="86" y="40" width="10" height="56" rx="3" transform="rotate(-20 91 68)"/>`,
+    plan:`<path class="s1" d="M14 34a8 8 0 0 1 8-8h26l10 10h40a8 8 0 0 1 8 8v52a8 8 0 0 1-8 8H22a8 8 0 0 1-8-8z"/><rect class="s2" x="22" y="44" width="78" height="52" rx="6"/><path class="tk" d="M34 84l14-14 12 10 22-22"/><circle class="s3" cx="82" cy="58" r="5"/>`,
+    cico:`<rect class="s2" x="16" y="20" width="88" height="82" rx="10"/><rect class="s1" x="16" y="20" width="88" height="20" rx="10"/><rect class="s1" x="16" y="30" width="88" height="10"/><circle class="s3" cx="36" cy="58" r="7"/><circle class="o" cx="60" cy="58" r="7"/><path class="o" d="M84 52l7 12h-14z"/><circle class="o" cx="36" cy="84" r="7"/><circle class="s3" cx="60" cy="84" r="7"/><circle class="s3" cx="84" cy="84" r="7"/>`
+  };
+  return `<svg viewBox="0 0 120 120" aria-hidden="true">${P[kind]||P.check}</svg>`;
+}
+function formCard(f){
+  const st=formAvail[f.id], g=FORM_GROUPS.find(x=>x.id===f.g);
+  const tag = {g1:"ART 프로그램", g2:"행동워크북", g3:"3단계 개별지원"}[f.g]+" · "+g.tier;
+  const state = st===undefined ? "파일 확인 중" : st ? "한글 파일 내려받기" : "준비 중";
+  return `<button type="button" class="fcard ${f.g}" data-act="dlForm" data-id="${f.id}" data-kind="card" ${st===true?"":"aria-disabled=\"true\""}>
+    <span class="fc-bg" aria-hidden="true"></span>
+    <span class="fc-idx num">${esc(f.no.replace("부록 ",""))}</span>
+    <span class="fc-art">${formArt(FORM_ART[f.id])}</span>
+    <span class="fc-body"><span class="fc-tag">${esc(tag)}</span><b class="fc-title">${esc(f.name)}</b><span class="fc-desc">${esc(f.desc)}</span>
+      <span class="fc-dl">${st?ic("download","sm"):ic("clock","sm")}${state}${st?` <small>.zip</small>`:""}</span></span>
+  </button>`;
+}
 async function checkForms(){
   if(!formChecked){ formChecked=true;
     await Promise.all(FORMS.map(async f=>{ try{ const r=await fetch(f.file,{method:"HEAD",cache:"no-store"}); formAvail[f.id]=r.ok && !/text\/html/.test(r.headers.get("content-type")||""); }catch(e){ formAvail[f.id]=false; } }));
   }
-  $$("[data-act=dlForm]").forEach(b=>{ const f=FORMS.find(x=>x.id===b.dataset.id); if(f) b.outerHTML=formBtn(f,b.classList.contains("toc-form")); });
+  $$("[data-act=dlForm]").forEach(b=>{ const f=FORMS.find(x=>x.id===b.dataset.id); if(f) b.outerHTML = b.dataset.kind==="card" ? formCard(f) : formBtn(f,b.classList.contains("toc-form")); });
 }
 AFTER.library = ()=>{ checkForms(); };
 async function downloadForm(id, btn){
   const f=FORMS.find(x=>x.id===id); if(!f) return;
-  const old=btn?btn.innerHTML:""; if(btn){ btn.disabled=true; btn.textContent="준비 중…"; }
+  const card=btn&&btn.dataset.kind==="card", old=btn?btn.innerHTML:"";
+  if(btn){ btn.disabled=true; if(card){ const dl=btn.querySelector(".fc-dl"); if(dl) dl.textContent="내려받는 중…"; } else btn.textContent="준비 중…"; }
   try{
     const res=await fetch(f.file); if(!res.ok) throw new Error("http");
     const blob=await res.blob();
@@ -2214,7 +2276,7 @@ document.addEventListener("click", async e=>{
     case "jump": { const c=$("#card-"+el.dataset.v); c.scrollIntoView({behavior:"smooth",block:"start"}); setTimeout(()=>{ const t=$("#tx-"+el.dataset.v); t&&t.focus({preventScroll:true}); },350); break; }
     case "step": { const k=el.dataset.k; const v=Math.max(0,(parseInt(d[k],10)||0)+(+el.dataset.d)); d[k]=String(v); $(k==="freq"?"#fFreq":"#fDur").value=d[k]; touchDraft(); break; }
     case "intensity": { const v=+el.dataset.v; d.intensity = d.intensity===v?0:v; $$("[data-act=intensity]").forEach(b=>b.setAttribute("aria-pressed", +b.dataset.v===d.intensity)); touchDraft(); break; }
-    case "openPanel": openPanel(el); break;
+    case "openPanel": { const r=el.dataset.rec ? state.records.find(x=>x.id===el.dataset.rec) : null; openPanel(el, r); break; }
     case "closePanel": closePanel(); break;
     case "panelCase": state.panel.caseId=el.dataset.id; drawPanel(); $("#panelBody").scrollTop=0; break;
     case "panelList": state.panel.caseId=null; drawPanel(); break;
@@ -2260,7 +2322,7 @@ document.addEventListener("click", async e=>{
     case "noticeModal": openModal({title:"개인정보 보호 안내", html:`<ul class="notice-list compact">${NOTICES.map(n=>`<li><span class="ib">${ic(n.i)}</span><div><b>${esc(n.t)}</b><p>${esc(n.p)}</p></div></li>`).join("")}</ul>${state.settings.ackAt?`<p class="small muted">${esc(fmtStamp(state.settings.ackAt))}에 확인한 안내입니다.</p>`:""}`, actions:[{label:"닫기",value:null,kind:"primary"}]}); break;
     case "toExport": state.exp={fmt:"xlsx", sid:state.hist.sid, from:state.hist.from, to:state.hist.to}; go("security"); setTimeout(()=>{ const c=$("#bkCard"); c&&c.scrollIntoView({block:"start",behavior:"smooth"}); },60); break;
     case "jumpTo": { const t=document.getElementById(el.dataset.v); if(t){ t.scrollIntoView({behavior:"smooth",block:"start"}); } break; }
-    case "dlForm": downloadForm(el.dataset.id, el); break;
+    case "dlForm": if(el.getAttribute("aria-disabled")!=="true") downloadForm(el.dataset.id, el); break;
     case "rsCheck": restoreCheck(); break;
     case "rsApply": restoreApply(); break;
     case "wipeAll": wipeAll(); break;
