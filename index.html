@@ -834,6 +834,33 @@ a.case-card:hover,.tile:hover,.rec-card:hover,.rel-item:hover,.type-btn:hover,.r
 /* 누적기록: 관련 사례 표시 */
 .rel-chip{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:1px 8px;border-radius:999px;font-size:11.5px;font-weight:700;background:color-mix(in srgb,var(--caramel) 18%,var(--surface));color:var(--caramel-ink)}
 .rec-note{font-size:13px;color:var(--muted);padding:8px 12px;border-radius:10px;background:var(--sunk)}
+
+/* ===== 상황 검색 입력창 ===== */
+.ask{display:grid;gap:12px;max-width:900px}
+.ask-chips{display:flex;flex-wrap:wrap;gap:8px}
+.ask-chip{padding:8px 15px;border-radius:999px;border:1px solid var(--hair);background:var(--surface);color:var(--ink);font-size:14px;line-height:1.35;text-align:left;box-shadow:0 1px 2px rgba(31,36,51,.04);transition:background .15s ease,border-color .15s ease,transform .12s ease}
+.ask-chip:hover{background:var(--sunk)}
+.ask-chip:active{transform:scale(.97)}
+.ask-chip[aria-pressed="true"]{background:var(--lav-soft);border-color:color-mix(in srgb,var(--lav-ink) 35%,var(--hair));color:var(--lav-ink)}
+.ask-box{position:relative;padding:14px 66px 14px 18px;border:1px solid var(--hair);border-radius:20px;background:var(--surface);box-shadow:var(--sh-soft);transition:border-color .2s ease,box-shadow .2s ease}
+.ask-box:focus-within{border-color:color-mix(in srgb,var(--lav-ink) 45%,var(--hair));box-shadow:0 0 0 4px color-mix(in srgb,var(--lav-soft) 80%,transparent),var(--sh-soft)}
+.ask-input{display:block;width:100%;min-height:56px;max-height:200px;padding:0;border:0;outline:none;resize:none;background:none;color:var(--ink);font-size:16.5px;line-height:1.6;overflow-y:auto}
+.ask-input::placeholder{color:var(--muted)}
+.ask-send{position:absolute;right:12px;bottom:12px;display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:50%;background:var(--cta);color:var(--on-cta);box-shadow:var(--sh-btn);transition:transform .15s ease,opacity .2s ease}
+.ask-send .ico{width:20px;height:20px;stroke-width:2.4}
+.ask-send:hover{transform:translateY(-1px)}
+.ask-box.empty .ask-send{opacity:.35;box-shadow:none}
+.ask-box.typing .ask-input{caret-color:var(--lav-ink)}
+/* ===== 자료실 2단 배치 ===== */
+.lib-stack{grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:36px;align-items:start}
+.lib-stack .toc{max-width:none}
+.lib-stack .fgrid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
+.lib-stack .fcard{height:316px}
+.lib-stack .fc-art{height:50%}
+.lib-stack .fc-art svg{width:112px;height:112px}
+@media (min-width:1061px){.lib-stack>section:first-child{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px)}}
+.lib-stack .fg-title:first-of-type{margin-top:8px}
+@media (max-width:1060px){.lib-stack{grid-template-columns:1fr}}
 </style>
 
 <header class="top">
@@ -907,6 +934,7 @@ a.case-card:hover,.tile:hover,.rec-card:hover,.rel-item:hover,.type-btn:hover,.r
   <symbol id="i-sync" viewBox="0 0 24 24"><path d="M4 12a8 8 0 0113.7-5.6L20 8.5M20 4.5v4h-4M20 12a8 8 0 01-13.7 5.6L4 15.5M4 19.5v-4h4"/><path d="M4 4l16 16"/></symbol>
   <symbol id="i-id" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4M15 10h3.5M15 13.5h3.5"/></symbol>
   <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 4h11l3.5 3.5V20H5V4z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
   <symbol id="i-siren" viewBox="0 0 24 24"><path d="M6.5 18v-5.5a5.5 5.5 0 0111 0V18"/><path d="M4 18h16v2.5H4zM12 3v2M4.2 6.2l1.4 1.4M19.8 6.2l-1.4 1.4"/></symbol>
 </svg>
 
@@ -1438,8 +1466,13 @@ VIEWS.search = ()=>{
   const modeTabs = [["situation","상황 검색"],["type","행동 유형별"],["toc","자료집 목차별"]].map(([k,l])=>`<button type="button" role="tab" aria-selected="${st.mode===k}" data-act="mode" data-v="${k}">${l}</button>`).join("");
   let body="";
   if(st.mode==="situation"){
-    body=`<form class="search-box" id="sForm" role="search"><label class="sr" for="sq">상황이나 행동</label><input class="inp" id="sq" value="${esc(st.q)}" placeholder="예: 모둠 활동에서 의견이 안 받아들여지면 물건을 던져요" autocomplete="off" spellcheck="false"><button class="btn primary" type="submit">${ic("search","sm")}찾기</button></form>
-    <p class="small muted">${ic("shield","sm")} 학생 실명, 연락처, 가정사 같은 정보는 검색창에 쓰지 마세요. 검색은 이 기기 안의 색인에서만 이루어집니다.</p>`;
+    body=`<div class="ask">
+      <div class="ask-chips" role="group" aria-label="예시 상황으로 찾기">${ASK_EXAMPLES.map(q=>`<button type="button" class="ask-chip" data-act="askFill" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>
+      <form class="ask-box${st.q?"":" empty"}" id="sForm" role="search"><label class="sr" for="sq">상황이나 행동</label>
+        <textarea class="ask-input" id="sq" rows="2" placeholder="교실에서 있었던 상황을 평소 말로 적어 주세요. 예: 모둠 활동에서 의견이 안 받아들여지면 물건을 던져요" autocomplete="off" spellcheck="false">${esc(st.q)}</textarea>
+        <button class="ask-send" type="submit" aria-label="찾기">${ic("up")}</button></form>
+      <p class="small muted">${ic("shield","sm")} 학생 실명, 연락처, 가정사 같은 정보는 검색창에 쓰지 마세요. 검색은 이 기기 안의 색인에서만 이루어집니다.</p>
+    </div>`;
   } else if(st.mode==="type"){
     body=Object.entries(CATS).map(([ck,cv])=>`<div class="type-group"><h2 class="tg-h">${esc(cv.label)}</h2><div class="type-grid">${Object.entries(TYPES).filter(([k,v])=>v.cat===ck).map(([k,v])=>`<button type="button" class="type-btn" aria-pressed="${st.type===k}" data-act="pickType" data-v="${k}"><span>${esc(v.label)}<br><small>${esc(v.hint)}</small></span><span class="num">${CASES.filter(c=>c.types.includes(k)).length}</span></button>`).join("")}</div></div>`).join("");
   } else {
@@ -1464,9 +1497,26 @@ AFTER.search = ()=>{
   if($("#fTy")) $("#fTy").value=st.type;
   if($("#fCat")) $("#fCat").value=st.cat;
   const f=$("#sForm");
-  if(f){ f.addEventListener("submit",e=>{e.preventDefault(); st.q=$("#sq").value.trim(); drawResults();}); $("#sq").addEventListener("input",debounce(()=>{st.q=$("#sq").value.trim(); drawResults();},180)); }
+  if(f){ const ta=$("#sq");
+    const grow=()=>{ ta.style.height="auto"; ta.style.height=Math.min(ta.scrollHeight,200)+"px"; f.classList.toggle("empty",!ta.value.trim()); };
+    f.addEventListener("submit",e=>{e.preventDefault(); st.q=ta.value.trim(); drawResults();});
+    ta.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); f.requestSubmit(); } });
+    ta.addEventListener("input",grow); ta.addEventListener("input",debounce(()=>{ if(askTimer) return; st.q=ta.value.trim(); drawResults();},180)); grow(); }
   if(st.mode!=="toc") drawResults(); else { $("#results").innerHTML=""; checkForms(); }
 };
+/* 예시 상황 버튼: 문장을 한 글자씩 입력한 뒤 바로 검색 */
+const ASK_EXAMPLES = ["모둠에서 의견이 안 받아들여지면 물건을 던져요","친구와 부딪히면 밀치고 욕을 해요","단톡방에서 특정 친구를 따돌려요","AI로 친구 사진을 합성해서 올려요","수업 중에 태블릿으로 게임을 해요"];
+let askTimer=null;
+function askFill(btn){
+  const ta=$("#sq"), f=$("#sForm"); if(!ta) return;
+  const q=btn.dataset.q; clearInterval(askTimer); askTimer=null;
+  $$(".ask-chip").forEach(b=>b.setAttribute("aria-pressed", b===btn));
+  ta.focus({preventScroll:true});
+  const done=()=>{ clearInterval(askTimer); askTimer=null; ta.value=q; ta.dispatchEvent(new Event("input")); state.search.q=q; drawResults(); f.classList.remove("typing"); };
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches) return done();
+  let i=0; ta.value=""; f.classList.add("typing");
+  askTimer=setInterval(()=>{ i++; ta.value=q.slice(0,i); ta.style.height="auto"; ta.style.height=Math.min(ta.scrollHeight,200)+"px"; f.classList.toggle("empty",!ta.value); if(i>=q.length) setTimeout(done,160); if(i>=q.length) clearInterval(askTimer); },32);
+}
 function drawResults(){
   const st=state.search, box=$("#results"); if(!box) return;
   if(st.mode==="type" && st.type==="all"){ box.innerHTML=`<p class="muted">위에서 행동 유형을 고르면 사례가 나타납니다.</p>`; return; }
@@ -1882,7 +1932,7 @@ const sortRecs = rs => rs.slice().sort((a,b)=>(b.date+b.time).localeCompare(a.da
 const recTypes = r => Array.from(new Set(r.b.tags.flatMap(id=>B_BY[id]?.types||[]).concat(Array.from(analyze(r.b.text).types))));
 function recCard(r){
   const bt=secText(r,"b",B_BY)||"행동 미입력"; const ctx=[stuName(r.studentId), r.place, r.activity].filter(Boolean).join(" · ");
-  return `<button type="button" class="rec-card" data-act="openRec" data-id="${r.id}"><span class="t">${esc(r.time)}<small>${esc(fmtDate(r.date).replace(/ \(.\)/,""))}</small></span><span style="min-width:0"><span class="b">${esc(bt.length>90?bt.slice(0,90)+"…":bt)}</span><span class="ctx">${esc(ctx)}${r.sample?" · 예시":""}${(n=>n?`<span class="rel-chip">관련 사례 ${n}</span>`:"")(relatedCases(r,"all").length)}</span></span>${ic("chev")}</button>`;
+  return `<button type="button" class="rec-card" data-act="openRec" data-id="${r.id}"><span class="t">${esc(r.time)}<small>${esc(fmtDate(r.date).replace(/ \(.\)/,""))}</small></span><span style="min-width:0"><span class="b">${esc(bt.length>90?bt.slice(0,90)+"…":bt)}</span><span class="ctx">${esc(ctx)}${r.sample?" · 예시":""}</span></span>${ic("chev")}</button>`;
 }
 VIEWS.history = ()=>{
   const h=state.hist;
@@ -2266,6 +2316,7 @@ document.addEventListener("click", async e=>{
   const a=el.dataset.act, d=state.draft;
   switch(a){
     case "topic": state.search.q=el.dataset.q; state.search.mode="situation"; if(state.route==="search"){ render(); } else go("search"); break;
+    case "askFill": askFill(el); break;
     case "mode": state.search.mode=el.dataset.v; if(el.dataset.v!=="type"&&state.search.mode==="situation"){} render(); break;
     case "pickType": state.search.type = state.search.type===el.dataset.v ? "all" : el.dataset.v; render(); setTimeout(()=>{ const r=$("#results"); r&&r.scrollIntoView({behavior:"smooth",block:"start"}) },20); break;
     case "clearFilters": Object.assign(state.search,{level:"all",type:"all",cat:"all"}); render(); break;
