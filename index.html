@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 </head>
 <body>
-<title>다:행 PBS 긍정행동 길잡이</title>
+<title>다:행 긍정행동 길라잡이</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -865,13 +865,16 @@ a.case-card:hover,.tile:hover,.rec-card:hover,.rel-item:hover,.type-btn:hover,.r
 .intro-pre{margin-bottom:10px}
 .intro-pre span{display:inline-block;font-family:var(--f-display);font-size:clamp(24px,3vw,34px);line-height:1;padding:8px 14px 7px;border-radius:10px;background:var(--navy);color:var(--on-navy);transform:rotate(-2deg);box-shadow:0 8px 18px -8px color-mix(in srgb,var(--navy) 70%,transparent)}
 @media (prefers-reduced-motion:no-preference){.intro .intro-pre span{animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}}
+
+.abc.abc-ko{font-size:clamp(62px,11.5vw,148px);line-height:.95;letter-spacing:-.01em}
+.abc.abc-ko::before{left:-.04em;top:-.04em}
 </style>
 
 <header class="top">
   <div class="top-in">
-    <a class="brand" href="#home" aria-label="다:행 PBS 긍정행동 길잡이 홈">
+    <a class="brand" href="#home" aria-label="다:행 긍정행동 길라잡이 홈">
       <span class="brand-mark">다:행</span>
-      <span class="brand-txt"><b>PBS 긍정행동 길잡이</b><small id="verSmall">자료집 v3 기준</small></span>
+      <span class="brand-txt"><b>긍정행동 길라잡이</b><small id="verSmall">자료집 v3 기준</small></span>
     </a>
     <nav class="nav" aria-label="주요 메뉴">
       <a href="#search" data-nav="search"><svg class="ico sm"><use href="#i-search"/></svg>PBS 검색</a>
@@ -1374,8 +1377,8 @@ VIEWS.home = ()=>{
   }
   return `
   <section class="intro">
-    <h1 class="sr">다:행 PBS 긍정행동 길잡이 — 무엇을 할지 고르세요</h1>
-    <div class="intro-pre" aria-hidden="true"><span>다:행</span></div><div class="intro-title" aria-hidden="true"><span class="abc" data-t="PBS"><span class="camo">PBS</span></span><span class="hero-sub">긍정행동 길잡이</span></div>
+    <h1 class="sr">다:행 긍정행동 길라잡이 — 무엇을 할지 고르세요</h1>
+    <div class="intro-pre" aria-hidden="true"><span>다:행</span></div><div class="intro-title" aria-hidden="true"><span class="abc abc-ko" data-t="긍정행동"><span class="camo">긍정행동</span></span><span class="hero-sub">길라잡이</span></div>
     <p class="hero-hand">( Positive Behavior Support )</p>
     <p class="tape hero-tape">오늘은 무엇을 도와드릴까요? 하나를 골라 시작하세요.</p>
   </section>
@@ -2226,7 +2229,7 @@ async function buildXlsx(rs){
   const sids=Array.from(new Set(rs.map(r=>r.studentId)));
   const ws2=X.utils.json_to_sheet(sids.map(id=>{ const s=stuById(id)||{}; const mine=rs.filter(r=>r.studentId===id); return {"학생 코드":s.code||"","별칭":s.alias||"","기록 수":mine.length,"첫 관찰일":mine[0]?.date||"","최근 관찰일":mine[mine.length-1]?.date||""}; }));
   ws2["!cols"]=[{wch:12},{wch:18},{wch:9},{wch:12},{wch:12}];
-  const info=X.utils.aoa_to_sheet([["다:행 PBS 긍정행동 길잡이 · ABC 관찰 기록"],["만든 날짜",fmtStamp(Date.now())],["범위",scopeText()],["기록 수",rs.length],["주의","이 파일은 암호화되어 있지 않습니다. 학생을 알아볼 수 있는 정보가 들어 있을 수 있으니 안전하게 보관하고 사용 후 삭제하세요."]]);
+  const info=X.utils.aoa_to_sheet([["다:행 긍정행동 길라잡이 · ABC 관찰 기록"],["만든 날짜",fmtStamp(Date.now())],["범위",scopeText()],["기록 수",rs.length],["주의","이 파일은 암호화되어 있지 않습니다. 학생을 알아볼 수 있는 정보가 들어 있을 수 있으니 안전하게 보관하고 사용 후 삭제하세요."]]);
   info["!cols"]=[{wch:12},{wch:90}];
   const wb=X.utils.book_new(); X.utils.book_append_sheet(wb,ws,"관찰 기록"); X.utils.book_append_sheet(wb,ws2,"학생별 요약"); X.utils.book_append_sheet(wb,info,"안내");
   const mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -2240,7 +2243,7 @@ async function buildPdf(rs){
   try{
     const pages=[]; const newPage=()=>{ const p=document.createElement("div"); p.className="pdf-page"; host.append(p); pages.push(p); return p; };
     let page=newPage();
-    page.insertAdjacentHTML("beforeend",`<div class="pdf-head"><div class="pdf-brand">다:행 PBS 긍정행동 길잡이</div><h1>ABC 관찰 기록</h1><div class="pdf-meta">${esc(scopeText())} · 기록 ${rs.length}건 · ${esc(fmtStamp(Date.now()))} 작성</div><div class="pdf-warn">암호화되지 않은 문서입니다. 학생을 알아볼 수 있는 정보가 들어 있을 수 있으니 안전하게 보관하고, 쓴 뒤에는 지워 주세요.</div></div>`);
+    page.insertAdjacentHTML("beforeend",`<div class="pdf-head"><div class="pdf-brand">다:행 긍정행동 길라잡이</div><h1>ABC 관찰 기록</h1><div class="pdf-meta">${esc(scopeText())} · 기록 ${rs.length}건 · ${esc(fmtStamp(Date.now()))} 작성</div><div class="pdf-warn">암호화되지 않은 문서입니다. 학생을 알아볼 수 있는 정보가 들어 있을 수 있으니 안전하게 보관하고, 쓴 뒤에는 지워 주세요.</div></div>`);
     let lastStu=null;
     for(const r of rs){
       const x=recRow(r);
@@ -2261,7 +2264,7 @@ async function buildPdf(rs){
       }
       lastStu=r.studentId;
     }
-    pages.forEach((p,i)=>p.insertAdjacentHTML("beforeend",`<div class="pdf-foot"><span>다:행 PBS 긍정행동 길잡이 · 암호화되지 않은 문서</span><span>${i+1} / ${pages.length}</span></div>`));
+    pages.forEach((p,i)=>p.insertAdjacentHTML("beforeend",`<div class="pdf-foot"><span>다:행 긍정행동 길라잡이 · 암호화되지 않은 문서</span><span>${i+1} / ${pages.length}</span></div>`));
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
     const { jsPDF } = window.jspdf; const pdf=new jsPDF({unit:"pt",format:"a4",compress:true});
     for(let i=0;i<pages.length;i++){
@@ -2269,7 +2272,7 @@ async function buildPdf(rs){
       if(i) pdf.addPage();
       pdf.addImage(cv.toDataURL("image/jpeg",0.9),"JPEG",0,0,595.28,841.89);
     }
-    pdf.setProperties({title:"ABC 관찰 기록", creator:"다:행 PBS 긍정행동 길잡이"});
+    pdf.setProperties({title:"ABC 관찰 기록", creator:"다:행 긍정행동 길라잡이"});
     return {name:`pbs-abc-records-${fileStamp()}.pdf`, mime:"application/pdf", data:pdf.output("blob")};
   } finally { host.remove(); }
 }
@@ -2409,7 +2412,7 @@ window.addEventListener("offline",()=>{ if(state.route==="search") drawResults()
    시작
    ========================================================= */
 (async function boot(){
-  $("#footVer").textContent = `다:행 PBS 긍정행동 길잡이 ${APP_VERSION} · ${CONTENT.name} ${CONTENT.version}`;
+  $("#footVer").textContent = `다:행 긍정행동 길라잡이 ${APP_VERSION} · ${CONTENT.name} ${CONTENT.version}`;
   $("#verSmall").textContent = `자료집 ${CONTENT.version.split(" ")[0]} 기준`;
   await DB.open();
   try{ const s=await DB.get("meta","settings"); if(s) state.settings={...state.settings,...s}; }catch(e){}
