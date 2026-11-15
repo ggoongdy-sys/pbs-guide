@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 </head>
 <body>
-<title>다:행 긍정행동 길라잡이</title>
+<title>대구형 생활교육 PBS 「다:행 긍정행동」 프로그램 온라인 플랫폼</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -862,8 +862,18 @@ a.case-card:hover,.tile:hover,.rec-card:hover,.rel-item:hover,.type-btn:hover,.r
 .lib-stack .fg-title:first-of-type{margin-top:8px}
 @media (max-width:1060px){.lib-stack{grid-template-columns:1fr}}
 
-.intro-pre{margin-bottom:10px}
-.intro-pre span{display:inline-block;font-family:var(--f-display);font-size:clamp(24px,3vw,34px);line-height:1;padding:8px 14px 7px;border-radius:10px;background:var(--navy);color:var(--on-navy);transform:rotate(-2deg);box-shadow:0 8px 18px -8px color-mix(in srgb,var(--navy) 70%,transparent)}
+.intro-kicker{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:clamp(14px,1.6vw,17px);font-weight:700;letter-spacing:.06em;color:var(--navy-ink)}
+.intro-kicker::before{content:"";width:28px;height:2px;border-radius:2px;background:var(--mauve)}
+.intro-kicker b{font-size:.78em;font-weight:700;letter-spacing:.12em;padding:3px 8px 2px;border-radius:999px;border:1.5px solid color-mix(in srgb,var(--navy) 35%,transparent);color:var(--muted)}
+.intro .intro-title{align-items:center;gap:6px 14px}
+.intro-brk{font-family:var(--f-display);font-size:clamp(40px,7vw,92px);line-height:1;color:var(--mauve);opacity:.85}
+.intro-brk:first-child{align-self:flex-start}
+.intro-brk:last-child{align-self:flex-end}
+@media (max-width:560px){.intro-brk{display:none}.intro .intro-title{gap:8px 12px}.intro-pre{flex-basis:100%}}
+.intro-plat{margin:12px 0 18px 4px;font-family:var(--f-display);font-size:clamp(22px,3.2vw,38px);line-height:1.1;color:var(--teal-ink)}
+.intro-plat b{font-weight:400;color:var(--navy-ink);background:linear-gradient(transparent 62%,color-mix(in srgb,var(--caramel) 38%,transparent) 0)}
+@media (prefers-reduced-motion:no-preference){.intro .intro-kicker,.intro .intro-plat{animation:fadein .5s .2s both}}
+.intro-pre span{display:inline-block;font-family:var(--f-display);font-size:clamp(30px,5vw,62px);line-height:1;padding:.2em .32em .16em;border-radius:.24em;background:var(--navy);color:var(--on-navy);transform:rotate(-2deg);box-shadow:0 8px 18px -8px color-mix(in srgb,var(--navy) 70%,transparent)}
 @media (prefers-reduced-motion:no-preference){.intro .intro-pre span{animation:pop .6s cubic-bezier(.2,1.4,.4,1) both}}
 
 .abc.abc-ko{font-size:clamp(62px,11.5vw,148px);line-height:.95;letter-spacing:-.01em}
@@ -872,9 +882,9 @@ a.case-card:hover,.tile:hover,.rec-card:hover,.rel-item:hover,.type-btn:hover,.r
 
 <header class="top">
   <div class="top-in">
-    <a class="brand" href="#home" aria-label="다:행 긍정행동 길라잡이 홈">
+    <a class="brand" href="#home" aria-label="대구형 생활교육 PBS 「다:행 긍정행동」 프로그램 온라인 플랫폼 홈">
       <span class="brand-mark">다:행</span>
-      <span class="brand-txt"><b>긍정행동 길라잡이</b><small id="verSmall">자료집 v3 기준</small></span>
+      <span class="brand-txt"><b>긍정행동</b><small>대구형 생활교육 PBS 플랫폼</small></span>
     </a>
     <nav class="nav" aria-label="주요 메뉴">
       <a href="#search" data-nav="search"><svg class="ico sm"><use href="#i-search"/></svg>PBS 검색</a>
@@ -978,7 +988,7 @@ const FN = {
   "감각 추구":{desc:"행동 자체에서 오는 감각 자극을 얻음", eg:"허용된 감각 활동 이용하기"}
 };
 const TIERS = {1:"1단계 보편적 지원", 2:"2단계 표준형 집중지원", 3:"3단계 맞춤형 심화지원"};
-const LEVELS = {"초":"초등","중":"중학교","고":"고등학교"};
+const LEVELS = {"초":"초등","중":"중등","고":"중등"};
 
 /* 자료집 목차 (단계명은 최종 확정 명칭 반영) */
 const CHAPTERS = [
@@ -1115,7 +1125,7 @@ const uid = p => p+"_"+Array.from(crypto.getRandomValues(new Uint8Array(9)),b=>b
 const clone = o => JSON.parse(JSON.stringify(o));
 function debounce(fn,ms){let t;return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
 const chapterLabel = ch => { const c=CH_BY[ch]; return c ? `${c.no}${c.id==="APX"?"":"장"}` : ch; };
-const lvText = lv => lv.length===3 ? "초·중·고 공통" : lv.map(l=>LEVELS[l]).join("·");
+const lvText = lv => [...new Set(lv.map(l=>LEVELS[l]))].join("·");
 
 /* =========================================================
    검색 엔진 (기기 안에서만 실행)
@@ -1377,9 +1387,10 @@ VIEWS.home = ()=>{
   }
   return `
   <section class="intro">
-    <h1 class="sr">다:행 긍정행동 길라잡이 — 무엇을 할지 고르세요</h1>
-    <div class="intro-pre" aria-hidden="true"><span>다:행</span></div><div class="intro-title" aria-hidden="true"><span class="abc abc-ko" data-t="긍정행동"><span class="camo">긍정행동</span></span><span class="hero-sub">길라잡이</span></div>
-    <p class="hero-hand">( Positive Behavior Support )</p>
+    <h1 class="sr">대구형 생활교육 PBS 「다:행 긍정행동」 프로그램 온라인 플랫폼 — 무엇을 할지 고르세요</h1>
+    <p class="intro-kicker" aria-hidden="true"><span>대구형 생활교육</span><b>PBS</b></p>
+    <div class="intro-title" aria-hidden="true"><span class="intro-brk">「</span><span class="intro-pre"><span>다:행</span></span><span class="abc abc-ko" data-t="긍정행동"><span class="camo">긍정행동</span></span><span class="intro-brk">」</span></div>
+    <p class="intro-plat" aria-hidden="true">프로그램 <b>온라인 플랫폼</b></p>
     <p class="tape hero-tape">오늘은 무엇을 도와드릴까요? 하나를 골라 시작하세요.</p>
   </section>
 
@@ -1486,7 +1497,7 @@ VIEWS.search = ()=>{
     body=`<div class="toc">${tocHTML()}</div>`;
   }
   const filters = st.mode==="toc" ? "" : `<div class="filters">
-      <div class="field"><label for="fLv">학교급</label><select class="sel" id="fLv" data-sf="level"><option value="all">전체</option><option value="초">초등</option><option value="중고">중등·고등</option></select></div>
+      <div class="field"><label for="fLv">학교급</label><select class="sel" id="fLv" data-sf="level"><option value="all">전체</option><option value="초">초등</option><option value="중고">중등</option></select></div>
       <div class="field"><label for="fCat">문제행동 유형</label><select class="sel" id="fCat" data-sf="cat"><option value="all">전체</option>${Object.entries(CATS).map(([k,v])=>`<option value="${k}">${esc(v.label)}</option>`).join("")}</select></div>
       ${st.mode==="situation"?`<div class="field"><label for="fTy">행동 형태</label><select class="sel" id="fTy" data-sf="type"><option value="all">전체</option>${Object.entries(TYPES).filter(([k,v])=>v.cat).map(([k,v])=>`<option value="${k}">${esc(v.label)}</option>`).join("")}</select></div>`:""}
     </div>`;
@@ -1561,7 +1572,7 @@ function tocHTML(){
   return CHAPTERS.map(ch=>{
     const cs=CASES.filter(c=>ch.id==="IV");
     const forms=(ch.forms||[]).map(id=>FORMS.find(f=>f.id===id)).filter(Boolean);
-    const badge = ch.id==="IV" ? `사례 ${CASES.length}` : (!ch.site && forms.length) ? `서식 ${forms.length}` : "";
+    const badge = ch.id==="IV" ? `사례 ${CASES.length}개` : (!ch.site && forms.length) ? `서식 ${forms.length}개` : "";
     const inner = [
       `<p class="toc-lead">${esc(ch.lead||"")}</p>`,
       ch.sec ? `<ul class="toc-sec">${ch.sec.map(s=>`<li>${esc(s)}</li>`).join("")}</ul>` : "",
@@ -1782,7 +1793,7 @@ function drawPanel(){
     const recNote = p.rec ? `<p class="rec-note">저장된 기록 기준 · ${esc(stuName(d.studentId))} · ${esc(fmtDate(d.date))} ${esc(d.time)}</p>` : "";
     const basis = recNote + ((bLabels.length||aLabels.length||d.b.text) ? `<div class="basis"><span class="muted">찾은 기준</span>${bLabels.map(l=>`<span class="pill mauve">B · ${esc(l)}</span>`).join("")}${d.b.text.trim()?`<span class="pill mauve">B 서술 키워드</span>`:""}${aLabels.map(l=>`<span class="pill navy">A · ${esc(l)}</span>`).join("")}</div>` : "");
     body=`${basis}
-      <div class="field"><label for="pLv" class="small">학교급</label><select id="pLv" class="sel" style="min-height:38px"><option value="all">전체</option><option value="초">초등</option><option value="중고">중등·고등</option></select></div>
+      <div class="field"><label for="pLv" class="small">학교급</label><select id="pLv" class="sel" style="min-height:38px"><option value="all">전체</option><option value="초">초등</option><option value="중고">중등</option></select></div>
       ${rel.length ? rel.map(x=>`<button type="button" class="rel-item" data-act="panelCase" data-id="${x.c.id}"><span class="row" style="gap:6px"><span class="pill lav">${esc(CATS[x.c.cat].short)}</span><span class="pill caramel">${esc(x.c.lvText)}</span><span class="pill">사례 ${x.c.no}</span>${x.c.safety?`<span class="pill danger">${ic("siren","sm")}안전 확보</span>`:""}</span><b>${esc(x.c.t)}</b><span class="hits" style="display:flex;flex-wrap:wrap;gap:4px">${x.hits.map(h=>`<span class="hitk">${esc(h)}</span>`).join("")}</span></button>`).join("")
         : `<div class="empty"><h3>${d.b.tags.length||d.b.text.trim()?"맞는 사례가 아직 없어요":"B 행동을 먼저 골라 주세요"}</h3><p class="muted small">B 관찰행동의 빠른 선택을 누르거나 행동을 적으면 관련 사례 후보가 나타납니다. A 선행사건은 보조 기준으로 쓰여요.</p><a class="btn ghost sm" href="#search" data-act="leaveToCase">전체 검색으로 가기</a></div>`}
       <p class="small muted">${ic("shield","sm")} 학생 코드와 이름은 검색에 쓰이지 않으며, 모든 비교는 이 기기 안에서 이루어집니다. 사례의 기능 가설은 참고용이며 이 학생의 기능을 판단하지 않습니다.</p>`;
@@ -2229,7 +2240,7 @@ async function buildXlsx(rs){
   const sids=Array.from(new Set(rs.map(r=>r.studentId)));
   const ws2=X.utils.json_to_sheet(sids.map(id=>{ const s=stuById(id)||{}; const mine=rs.filter(r=>r.studentId===id); return {"학생 코드":s.code||"","별칭":s.alias||"","기록 수":mine.length,"첫 관찰일":mine[0]?.date||"","최근 관찰일":mine[mine.length-1]?.date||""}; }));
   ws2["!cols"]=[{wch:12},{wch:18},{wch:9},{wch:12},{wch:12}];
-  const info=X.utils.aoa_to_sheet([["다:행 긍정행동 길라잡이 · ABC 관찰 기록"],["만든 날짜",fmtStamp(Date.now())],["범위",scopeText()],["기록 수",rs.length],["주의","이 파일은 암호화되어 있지 않습니다. 학생을 알아볼 수 있는 정보가 들어 있을 수 있으니 안전하게 보관하고 사용 후 삭제하세요."]]);
+  const info=X.utils.aoa_to_sheet([["「다:행 긍정행동」 온라인 플랫폼 · ABC 관찰 기록"],["만든 날짜",fmtStamp(Date.now())],["범위",scopeText()],["기록 수",rs.length],["주의","이 파일은 암호화되어 있지 않습니다. 학생을 알아볼 수 있는 정보가 들어 있을 수 있으니 안전하게 보관하고 사용 후 삭제하세요."]]);
   info["!cols"]=[{wch:12},{wch:90}];
   const wb=X.utils.book_new(); X.utils.book_append_sheet(wb,ws,"관찰 기록"); X.utils.book_append_sheet(wb,ws2,"학생별 요약"); X.utils.book_append_sheet(wb,info,"안내");
   const mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -2243,7 +2254,7 @@ async function buildPdf(rs){
   try{
     const pages=[]; const newPage=()=>{ const p=document.createElement("div"); p.className="pdf-page"; host.append(p); pages.push(p); return p; };
     let page=newPage();
-    page.insertAdjacentHTML("beforeend",`<div class="pdf-head"><div class="pdf-brand">다:행 긍정행동 길라잡이</div><h1>ABC 관찰 기록</h1><div class="pdf-meta">${esc(scopeText())} · 기록 ${rs.length}건 · ${esc(fmtStamp(Date.now()))} 작성</div><div class="pdf-warn">암호화되지 않은 문서입니다. 학생을 알아볼 수 있는 정보가 들어 있을 수 있으니 안전하게 보관하고, 쓴 뒤에는 지워 주세요.</div></div>`);
+    page.insertAdjacentHTML("beforeend",`<div class="pdf-head"><div class="pdf-brand">「다:행 긍정행동」 온라인 플랫폼</div><h1>ABC 관찰 기록</h1><div class="pdf-meta">${esc(scopeText())} · 기록 ${rs.length}건 · ${esc(fmtStamp(Date.now()))} 작성</div><div class="pdf-warn">암호화되지 않은 문서입니다. 학생을 알아볼 수 있는 정보가 들어 있을 수 있으니 안전하게 보관하고, 쓴 뒤에는 지워 주세요.</div></div>`);
     let lastStu=null;
     for(const r of rs){
       const x=recRow(r);
@@ -2264,7 +2275,7 @@ async function buildPdf(rs){
       }
       lastStu=r.studentId;
     }
-    pages.forEach((p,i)=>p.insertAdjacentHTML("beforeend",`<div class="pdf-foot"><span>다:행 긍정행동 길라잡이 · 암호화되지 않은 문서</span><span>${i+1} / ${pages.length}</span></div>`));
+    pages.forEach((p,i)=>p.insertAdjacentHTML("beforeend",`<div class="pdf-foot"><span>「다:행 긍정행동」 온라인 플랫폼 · 암호화되지 않은 문서</span><span>${i+1} / ${pages.length}</span></div>`));
     if(document.fonts && document.fonts.ready) await document.fonts.ready;
     const { jsPDF } = window.jspdf; const pdf=new jsPDF({unit:"pt",format:"a4",compress:true});
     for(let i=0;i<pages.length;i++){
@@ -2272,7 +2283,7 @@ async function buildPdf(rs){
       if(i) pdf.addPage();
       pdf.addImage(cv.toDataURL("image/jpeg",0.9),"JPEG",0,0,595.28,841.89);
     }
-    pdf.setProperties({title:"ABC 관찰 기록", creator:"다:행 긍정행동 길라잡이"});
+    pdf.setProperties({title:"ABC 관찰 기록", creator:"「다:행 긍정행동」 온라인 플랫폼"});
     return {name:`pbs-abc-records-${fileStamp()}.pdf`, mime:"application/pdf", data:pdf.output("blob")};
   } finally { host.remove(); }
 }
@@ -2412,8 +2423,7 @@ window.addEventListener("offline",()=>{ if(state.route==="search") drawResults()
    시작
    ========================================================= */
 (async function boot(){
-  $("#footVer").textContent = `다:행 긍정행동 길라잡이 ${APP_VERSION} · ${CONTENT.name} ${CONTENT.version}`;
-  $("#verSmall").textContent = `자료집 ${CONTENT.version.split(" ")[0]} 기준`;
+  $("#footVer").textContent = `「다:행 긍정행동」 온라인 플랫폼 ${APP_VERSION} · ${CONTENT.name} ${CONTENT.version}`;
   await DB.open();
   try{ const s=await DB.get("meta","settings"); if(s) state.settings={...state.settings,...s}; }catch(e){}
   try{ const v=await DB.get("meta","vault"); if(v) state.vault=v; }catch(e){}
