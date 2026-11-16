@@ -985,13 +985,28 @@ main{padding-block:48px 140px}
   .ip-chevs b{font-size:24px}
 }
 @media (prefers-reduced-motion:reduce){.intro-poster{animation:none}}
+
+/* ===== 히어로 문구 정리 (2026.11.16 오후) ===== */
+.intro-kicker{gap:12px;letter-spacing:.02em;margin-bottom:22px}
+.intro-kicker i{width:4px;height:4px;border-radius:50%;background:color-mix(in srgb,var(--navy) 40%,transparent)}
+.intro-kicker .k2{font-weight:600;color:var(--muted)}
+.intro .intro-title{margin-left:calc(-1 * clamp(34px,4.6vw,60px) * .62)}
+.intro .intro-brk:first-child{margin-right:-.12em}
+.intro-plat{margin:20px 0 0}
+.intro-lead{max-width:34em;margin:26px 0 0;padding-top:24px;border-top:1px solid var(--hair);font-size:16.5px;line-height:1.75;color:var(--muted)}
+.intro-lead b{display:block;margin-bottom:8px;font-size:clamp(19px,1.9vw,23px);font-weight:800;letter-spacing:-.03em;line-height:1.4;color:var(--navy-ink)}
+.intro-lead small{font-size:.58em;font-weight:700;vertical-align:.7em;margin:0 .08em 0 .04em;color:var(--mauve-ink)}
+.intro{margin-bottom:56px}
+.choose-tape{display:table;margin:0 0 22px}
+@media (max-width:1080px){.intro .intro-title{margin-left:0}}
+@media (max-width:560px){.intro-kicker{flex-wrap:wrap;gap:4px 10px}.intro-lead{font-size:15.5px}.intro-lead b{font-size:18px}}
 </style>
 
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#home" aria-label="대구형 생활교육 PBS 「다:행 긍정행동」 프로그램 온라인 플랫폼 홈">
       <span class="brand-mark">다:행</span>
-      <span class="brand-txt"><b>긍정행동</b><small>대구형 생활교육 PBS 플랫폼</small></span>
+      <span class="brand-txt"><b>긍정행동</b><small>대구형 생활교육 · 온라인 플랫폼</small></span>
     </a>
     <nav class="nav" aria-label="주요 메뉴">
       <a href="#search" data-nav="search"><svg class="ico sm"><use href="#i-search"/></svg>PBS 검색</a>
@@ -1499,10 +1514,10 @@ VIEWS.home = ()=>{
   <section class="intro">
     <h1 class="sr">대구형 생활교육 PBS 「다:행 긍정행동」 프로그램 온라인 플랫폼 — 무엇을 할지 고르세요</h1>
     <div class="intro-text">
-    <p class="intro-kicker" aria-hidden="true"><span>대구형 생활교육</span><b>PBS</b></p>
+    <p class="intro-kicker" aria-hidden="true"><span>대구형 생활교육</span><i></i><span class="k2">긍정적 행동지원(PBS) 프로그램</span></p>
     <div class="intro-title" aria-hidden="true"><span class="intro-brk">「</span><span class="intro-pre"><span>다:행</span></span><span class="abc abc-ko" data-t="긍정행동"><span class="camo">긍정행동</span></span><span class="intro-brk">」</span></div>
     <p class="intro-plat" aria-hidden="true">프로그램 <b>온라인 플랫폼</b></p>
-    <p class="tape hero-tape">오늘은 무엇을 도와드릴까요? 하나를 골라 시작하세요.</p>
+    <p class="intro-lead"><b>다<small>多</small> 함께 행<small>行</small>하고, 다 함께 행<small>幸</small>복한 학교</b>교육공동체 모두가 바람직한 행동을 함께 배우고 실천하는 학교 차원의 긍정적 행동지원 프로그램입니다. 교실 상황에 맞는 사례를 찾고, 학생의 행동을 기록해 이유를 살펴보세요.</p>
     </div>
     <aside class="intro-poster" aria-hidden="true">
       <span class="ip-tape"></span>
@@ -1514,6 +1529,7 @@ VIEWS.home = ()=>{
     </aside>
   </section>
 
+  <p class="tape hero-tape choose-tape">오늘은 무엇을 도와드릴까요? 하나를 골라 시작하세요.</p>
   <nav class="choose" aria-label="시작할 작업 고르기">
     <a class="mag-card find" href="#search" data-mag>
       <span class="mag-field" aria-hidden="true"></span>
